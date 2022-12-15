@@ -11,21 +11,25 @@ datasource db {
 }
 
 model Manager {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
   lastname String
-  email String
+  email    String
   password String
 
   @@map("managers")
 }
 
-model Parents {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
-  lastname String
+model Parent {
+  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  lastname        String
   studentFullName String
-  grade String
-  email String
-  password String
+  grade           String
+  schoolClass     String
+  course          String
+  email           String
+  password        String
+
+  @@map("parents")
 }
