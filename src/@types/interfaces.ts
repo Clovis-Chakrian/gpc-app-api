@@ -18,6 +18,20 @@ interface IParent {
   password: string
 };
 
+interface INotice {
+  id?: string,
+  title: string,
+  description: string,
+  schoolClass: string
+}
+
+interface IEvent {
+  id: string,
+  title: string,
+  description: string,
+  date: Date
+};
+
 // interface temporária. (falta id de mensagem e outras coisas que vao ser adicionadas quando houver o model do banco de dados)
 interface IMessage {
   room: string,
@@ -25,4 +39,4 @@ interface IMessage {
   author: string
 };
 
-export { IManager, IMessage, IParent };
+export { IManager, IMessage, IParent, INotice, IEvent };
