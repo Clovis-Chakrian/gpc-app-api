@@ -1,4 +1,4 @@
-import { string, number, object } from 'yup';
+import { string, number, object, date } from 'yup';
 
 let managerSchema = object({
   name: string().required('O campo nome é obrigatório.'),
@@ -18,4 +18,16 @@ let parentSchema = object({
   password: string().required('O campo senha é obrigatório.')
 });
 
-export { managerSchema, parentSchema };
+let noticeSchema = object({
+  title: string().required('O campo de título do aviso é obrigatório.'),
+  description: string().required('O campo de descrição do aviso é obrigatório.'),
+  schoolClass: string().required('O campo de turma do aviso é obrigatório.')
+});
+
+let eventSchema = object({
+  title: string().required('O campo de título é obrigatório'),
+  description: string().required('O campo de descrição é obrigatório.'),
+  date: date().required('O campo de data é obrigatório.')
+});
+
+export { managerSchema, parentSchema, noticeSchema, eventSchema };
