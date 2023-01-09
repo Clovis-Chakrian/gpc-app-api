@@ -11,11 +11,12 @@ datasource db {
 }
 
 model Manager {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  lastname String
-  email    String
-  password String
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  lastname  String
+  email     String
+  password  String
+  pushToken String
 
   @@map("managers")
 }
@@ -30,6 +31,33 @@ model Parent {
   course          String
   email           String
   password        String
+  pushToken       String
 
   @@map("parents")
+}
+
+model Notice {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  schoolClass String
+
+  @@map("notices")
+}
+
+model Event {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  date        DateTime
+
+  @@map("events")
+}
+
+model Schedules {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  url         String
+  schoolClass String
+
+  @@map("schedules")
 }
