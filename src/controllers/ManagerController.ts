@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, response, Response } from "express";
 import prismaClient from "../database/prismaClient";
 import * as bcrypt from 'bcrypt';
 import jwt from 'jwt-simple';
@@ -14,7 +14,8 @@ export default {
       name,
       lastname,
       email,
-      password
+      password,
+      pushToken
     } = req.body;
 
     const data = {
@@ -32,14 +33,15 @@ export default {
           name,
           lastname,
           email,
-          password: hash
+          password: hash,
+          pushToken
         };
 
         await prismaClient.manager.create({
           data: manager
         }).then((resp: IManager) => {
-          const token = jwt.encode(resp.id, `${process.env.JWT_SECRET}`)
-          return res.status(201).json({token: token});
+          const token = jwt.encode({ id: resp.id, email: resp.email }, `${process.env.JWT_SECRET}`)
+          return res.status(201).json({ token: token });
         }).catch((err) => {
           return res.status(500).json({
             message: 'Houve um erro interno do servidor.',
@@ -53,5 +55,37 @@ export default {
         errors: err.errors
       });
     });
-  }
+  },
+
+  async login(req: Request, res: Response) {
+    await prismaClient.$connect();
+
+    const { email, password } = req.body;
+
+    await prismaClient.manager.findFirst({
+      where: { email: email }
+    }).then(async manager => {
+      if (manager) {
+        await bcrypt.compare(password, manager?.password).then((result) => {
+          if (result) {
+            const token = jwt.encode({ id: manager.id, email: manager.email }, `${process.env.JWT_SECRET}`)
+            return res.status(200).json({ token });
+          }
+
+          return res.status(401).json({
+            message: 'Email ou senha incorretos'
+          });
+        }).catch(err => {
+          return res.status(500).json({
+            message: 'Houve um erro interno do servidor.',
+            errors: err
+          });
+        });
+      } else {
+        return res.status(400).json({
+          message: 'Email ou senha incorretos',
+        });
+      };
+    });
+  },
 };
